@@ -1,0 +1,55 @@
+{
+  "heroes": [
+    {
+      "id": 4,
+      "name": "Первый герой",
+      "description": "Первый герой в рейтинге!",
+      "element": "fire"
+    },
+    {
+      "id": 8,
+      "name": "Неизвестный герой",
+      "description": "Скрывающийся в тени",
+      "element": "wind"
+    },
+    {
+      "id": "d1aa0cb1-1466-4105-ac06-62e4c20a74db",
+      "name": "Stan",
+      "description": "All stuff",
+      "element": "water"
+    },
+    {
+      "id": "29755ecb-0446-4312-b38e-3290a8468368",
+      "name": "ddd",
+      "description": "dddd",
+      "element": "fire"
+    }
+  ],
+  "filters": [
+    {
+      "name": "all",
+      "id": 1,
+      "style": "outline-dark"
+    },
+    {
+      "name": "fire",
+      "id": 2,
+      "style": "danger"
+    },
+    {
+      "name": "water",
+      "id": 3,
+      "style": "primary"
+    },
+    {
+      "name": "wind",
+      "id": 4,
+      "style": "success"
+    },
+    {
+      "name": "earth",
+      "id": 5,
+      "style": "secondary"
+    }
+  ]
+}
