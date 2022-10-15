@@ -1,18 +1,8 @@
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import {useHttp} from '../../hooks/http.hook';
 import { useDispatch, useSelector } from "react-redux";
 import { v4 as uuidv4 } from 'uuid';
-import { heroCreating } from '../../actions';
-
-// Задача для этого компонента:
-// Реализовать создание нового героя с введенными данными. Он должен попадать
-// в общее состояние и отображаться в списке + фильтроваться
-// Уникальный идентификатор персонажа можно сгенерировать через uiid
-// Усложненная задача:
-// Персонаж создается и в файле json при помощи метода POST
-// Дополнительно:
-// Элементы <option></option> желательно сформировать на базе
-// данных из фильтров
+import { heroCreating, heroCreated, heroCreatingError } from '../../actions';
 
 const HeroesAddForm = () => {
     const dispatch = useDispatch();
@@ -23,21 +13,24 @@ const HeroesAddForm = () => {
 
     const {request} = useHttp();
 
-    const { filters } = useSelector(state => state);
+    const { filters } = useSelector(state => state.filters);
 
-    const onCreateHero =(id) => {
-        //dispatch(deleteHero(id));
-        request(`http://localhost:3001/heroes/`, "POST", JSON.stringify({
-            id: uuidv4(), 
-            name, 
-            description, 
+    const onCreateHero = ( id ) => {
+        request( 'http://localhost:3001/heroes/', "POST", JSON.stringify( {
+            id,
+            name,
+            description,
             element
-        }))
+        } ) )
+        .catch( heroCreatingError() );
     }
 
     const Options = () => {
         return (
-            filters.map((el) => {
+            filters.map( ( el ) => {
+                if ( el.name === 'all' ) {
+                    return
+                }
               return (
                 <option key={el.id} value={el.name}>{el.name}</option>
               )
@@ -45,11 +38,18 @@ const HeroesAddForm = () => {
         )
     };
 
-    const createHero = useCallback(() => {
+    const createHero = () => {
         const id = uuidv4();
-        dispatch(heroCreating({id, name, description, element}));
+        dispatch(heroCreating());
+        dispatch( heroCreated({
+            id,
+            name,
+            description,
+            element
+        })
+        );
         onCreateHero(id)
-    }, [description, dispatch, element, name, onCreateHero])
+    }
 
 
     return (
