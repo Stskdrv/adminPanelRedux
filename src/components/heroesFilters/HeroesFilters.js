@@ -24,9 +24,9 @@ const HeroesFilters = () => {
         );
         dispatch(filtersFetching());
         fetchFilters();
-    }, [dispatch, request])
+    }, [])
 
-    const { filters, activeFilter } = useSelector(state => state);
+    const { filters, activeFilter } = useSelector(state => state.filters);
 
     console.log(filters);
     const FiltersButtons = () => {

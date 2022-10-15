@@ -2,18 +2,29 @@ import { v4 as uuidv4 } from 'uuid';
 import {useHttp} from '../../hooks/http.hook';
 import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { createSelector } from 'reselect';
 
 import { heroesFetching, heroesFetched, heroesFetchingError } from '../../actions';
 import HeroesListItem from "../heroesListItem/HeroesListItem";
 import Spinner from '../spinner/Spinner';
 
-// Задача для этого компонента:
-// При клике на "крестик" идет удаление персонажа из общего состояния
-// Усложненная задача:
-// Удаление идет и с json файла при помощи метода DELETE
-
 const HeroesList = () => {
-    const {heroes, heroesLoadingStatus, activeFilter} = useSelector(state => state);
+    const filteredHeroesSelector = createSelector(
+        state => state.heroes.heroes,
+        state => state.filters.activeFilter,
+      
+        ( heroes, filter ) => {
+            console.log(heroes,filter)
+            if(filter === 'all') {
+                return heroes
+            } else {
+                return heroes.filter((el) => el.element === filter);
+            }     
+        }
+    )
+
+    const {heroesLoadingStatus} = useSelector(state => state.heroes)
+
     const dispatch = useDispatch();
     const {request} = useHttp();
 
@@ -27,7 +38,7 @@ const HeroesList = () => {
         dispatch(heroesFetching());
         fetchHeroes();
         // eslint-disable-next-line
-    }, [activeFilter]);
+    }, []);
 
     const onDelete =useCallback((id) => {
         //dispatch(deleteHero(id));
@@ -35,28 +46,24 @@ const HeroesList = () => {
             .then(() => fetchHeroes())
     }, [request])
 
+    const filteredHeroes = useSelector( filteredHeroesSelector );
+
     if (heroesLoadingStatus === "loading") {
         return <Spinner/>;
     } else if (heroesLoadingStatus === "error") {
         return <h5 className="text-center mt-5">Ошибка загрузки</h5>
     }
 
-    const renderHeroesList = (arr) => {
-        if (arr.length === 0) {
+    const renderHeroesList = () => {
+        if (filteredHeroes.length === 0) {
             return <h5 className="text-center mt-5">Героев пока нет</h5>
         }
-        if(activeFilter === 'all') {
-            return arr?.map(({id, ...props}) => {
-                return <HeroesListItem key={uuidv4()} onDelete={() => onDelete(id)} {...props}/>
-            })
-        } else {
-           return arr.filter((el) => el.element === activeFilter).map(({id, ...props}) => {
-            return <HeroesListItem key={uuidv4()} onDelete={() => onDelete(id)} {...props}/>
-        })
-        }
+       return filteredHeroes?.map(({id, ...props}) => {
+        return <HeroesListItem key={uuidv4()} onDelete={() => onDelete(id)} {...props}/>
+       })
     }
 
-    const elements = renderHeroesList(heroes);
+    const elements = renderHeroesList();
     return (
         <ul>
             {elements}

@@ -54,9 +54,20 @@ export const filtersFetchingError = () => {
     }
 }
 
-export const heroCreating = (hero) => {
+export const heroCreating = () => {
     return {
-        type: 'CREATE_HERO',
+        type: 'HEROES_CREATING'
+    }
+}
+export const heroCreated = (hero) => {
+    return {
+        type: 'HEROES_CREATED',
         payload: hero,
+    }
+}
+
+export const heroCreatingError = () => {
+    return {
+        type: 'HEROES_CREATING_ERROR'
     }
 }
