@@ -26,6 +26,14 @@ export const deleteHero = (id) => {
     }
 }
 
+
+export const fechHeroes = (request) => (dispatch) => {
+    dispatch( heroesFetching() );
+    request ("http://localhost:3001/heroes")
+    .then(data => dispatch(heroesFetched(data)))
+    .catch(() => dispatch(heroesFetchingError()))
+}
+
 export const filtersFetching = () => {
     return {
         type: 'FILTERS_FETCHING',
@@ -47,6 +55,17 @@ export const setActiveFilter = (filterName) => {
 
     }
 }
+
+// export const setActiveFilter = ( filterName ) => ( dispatch ) => {
+//     setTimeout( () => {
+//         dispatch({
+//             type: 'SET_FILTER',
+//             payload: filterName,
+    
+//         })
+//     }, 1000)
+
+// }
 
 export const filtersFetchingError = () => {
     return {
