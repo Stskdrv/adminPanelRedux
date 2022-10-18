@@ -1,8 +1,12 @@
-export const heroesFetching = () => {
-    return {
-        type: 'HEROES_FETCHING'
-    }
-}
+import { createAction } from "@reduxjs/toolkit"
+
+// export const heroesFetching = () => {
+//     return {
+//         type: 'HEROES_FETCHING'
+//     }
+// }
+
+export const heroesFetching = createAction( 'HEROES_FETCHING' ); // base case with RTK
 
 export const heroesFetched = (heroes) => {
     return {
