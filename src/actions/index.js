@@ -8,27 +8,28 @@ import { createAction } from "@reduxjs/toolkit"
 
 export const heroesFetching = createAction( 'HEROES_FETCHING' ); // base case with RTK
 
-export const heroesFetched = (heroes) => {
-    return {
-        type: 'HEROES_FETCHED',
-        payload: heroes
-    }
-}
+// export const heroesFetched = (heroes) => {
+//     return {
+//         type: 'HEROES_FETCHED',
+//         payload: heroes
+//     }
+// }
 
-export const heroesFetchingError = () => {
-    return {
-        type: 'HEROES_FETCHING_ERROR'
-    }
-}
+export const heroesFetched = createAction( 'HEROES_FETCHED' ) // here we can see that payload added to action automatically, 
+//we don't need to pass it and save in store
 
-export const deleteHero = (id) => {
-    return {
-        type: 'DELETE_HERO',
-        payload: {
-            id: id,
-        }
-    }
-}
+export const heroesFetchingError = createAction( 'HEROES_FETCHING_ERROR' );
+
+export const deleteHero = createAction( 'DELETE_HERO' );
+
+// export const deleteHero = (id) => {
+//     return {
+//         type: 'DELETE_HERO',
+//         payload: {
+//             id: id,
+//         }
+//     }
+// }
 
 
 export const fechHeroes = (request) => (dispatch) => {
@@ -77,20 +78,8 @@ export const filtersFetchingError = () => {
     }
 }
 
-export const heroCreating = () => {
-    return {
-        type: 'HEROES_CREATING'
-    }
-}
-export const heroCreated = (hero) => {
-    return {
-        type: 'HEROES_CREATED',
-        payload: hero,
-    }
-}
+export const heroCreating = createAction( 'HEROES_CREATING' );
 
-export const heroCreatingError = () => {
-    return {
-        type: 'HEROES_CREATING_ERROR'
-    }
-}
+export const heroCreated = createAction( 'HEROES_CREATED' );
+
+export const heroCreatingError = createAction( 'HEROES_CREATING_ERROR' );
