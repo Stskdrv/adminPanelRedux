@@ -2,9 +2,9 @@ import { v4 as uuidv4 } from 'uuid';
 import {useHttp} from '../../hooks/http.hook';
 import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { createSelector } from 'reselect';
+import { createSelector } from '@reduxjs/toolkit';
 
-import { fechHeroes } from '../../actions';
+import { fetchHeroes } from '../../reducers/heroesSlice';
 import HeroesListItem from "../heroesListItem/HeroesListItem";
 import Spinner from '../spinner/Spinner';
 
@@ -27,19 +27,15 @@ const HeroesList = () => {
     const dispatch = useDispatch();
     const {request} = useHttp();
 
-    const fetchHeroes = () => {
-        dispatch(fechHeroes( request ) );
-    }
-
     useEffect(() => {
-        fetchHeroes();
+        dispatch(fetchHeroes());
         // eslint-disable-next-line
     }, []);
 
     const onDelete =useCallback((id) => {
         //dispatch(deleteHero(id));
         request(`http://localhost:3001/heroes/${id}`, "DELETE")
-            .then(() => fetchHeroes())
+            .then(() => dispatch(fetchHeroes()))
     }, [request])
 
     const filteredHeroes = useSelector( filteredHeroesSelector );

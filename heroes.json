@@ -17,18 +17,6 @@
       "name": "Stan",
       "description": "All stuff",
       "element": "water"
-    },
-    {
-      "id": "c27215ef-bba7-4b1b-b822-1c48f3f45ffa",
-      "name": "zzz",
-      "description": "zzz",
-      "element": "wind"
-    },
-    {
-      "id": "ae5d2c8c-9939-4752-b3ee-1366cab659f2",
-      "name": "ccc",
-      "description": "ccscqc",
-      "element": "water"
     }
   ],
   "filters": [
