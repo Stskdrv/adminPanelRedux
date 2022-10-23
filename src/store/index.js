@@ -1,8 +1,6 @@
-//import { createStore, combineReducers, compose, applyMiddleware } from 'redux';
 import { configureStore } from '@reduxjs/toolkit';
-//import ReduxThunk from 'redux-thunk';
-import filters from '../reducers/filters';
-import heroes from '../components/heroesList/heroesSlice';// export default of reducer and rename on heroes
+import filters from '../reducers/filtersSlice';
+import heroes from '../reducers/heroesSlice';// export default of reducer and rename on heroes
 
 const stringMiddleWare = () => ( dispatch ) => ( action ) => {
 
@@ -13,19 +11,6 @@ const stringMiddleWare = () => ( dispatch ) => ( action ) => {
 
 };
 
-// const enhancer = ( createStore ) => (...args) => {
-//     const store = createStore( ...args );
-
-//     const oldDispatch = store.dispatch;
-//     store.dispatch = ( action ) => {
-//         if ( typeof action === 'string' ) {
-//             return oldDispatch( { type: action } );
-//         }
-//         return oldDispatch( action );
-//     }
-//     return store;
-// }
-
 // it's variant with RTK
 const store = configureStore( {
     reducer: { heroes, filters },
@@ -34,20 +19,5 @@ const store = configureStore( {
 
 })
 
-
-
-
-//it's how we should do using pure redux
-// const store = createStore( combineReducers( { heroes, filters } ),
-//     compose(
-//         applyMiddleware(ReduxThunk, stringMiddleWare ),
-//         window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
-//     )
-//     // compose(
-//     // enhancer,
-//     // window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-//     // )
-
-// );
 
 export default store;

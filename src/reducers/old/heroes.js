@@ -9,7 +9,7 @@ import {
     heroCreatingError,
     heroCreating,
 
-} from '../actions/index';
+} from '../../actions/index';
 
 const initialState = {
     heroes: [],
