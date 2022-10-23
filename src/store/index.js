@@ -2,7 +2,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 //import ReduxThunk from 'redux-thunk';
 import filters from '../reducers/filters';
-import heroes from '../reducers/heroes';
+import heroes from '../components/heroesList/heroesSlice';// export default of reducer and rename on heroes
 
 const stringMiddleWare = () => ( dispatch ) => ( action ) => {
 

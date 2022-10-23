@@ -54,7 +54,8 @@ const HeroesList = () => {
         if (filteredHeroes.length === 0) {
             return <h5 className="text-center mt-5">Героев пока нет</h5>
         }
-       return filteredHeroes?.map(({id, ...props}) => {
+        console.log(filteredHeroes);
+       return filteredHeroes.map(({id, ...props}) => {
         return <HeroesListItem key={uuidv4()} onDelete={() => onDelete(id)} {...props}/>
        })
     }
