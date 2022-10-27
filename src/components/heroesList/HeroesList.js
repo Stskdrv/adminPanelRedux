@@ -4,13 +4,13 @@ import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from '@reduxjs/toolkit';
 
-import { fetchHeroes } from '../../reducers/heroesSlice';
+import { fetchHeroes, selectAll } from '../../reducers/heroesSlice';
 import HeroesListItem from "../heroesListItem/HeroesListItem";
 import Spinner from '../spinner/Spinner';
 
 const HeroesList = () => {
     const filteredHeroesSelector = createSelector(
-        state => state.heroes.heroes,
+        selectAll,
         state => state.filters.activeFilter,
       
         ( heroes, filter ) => {
