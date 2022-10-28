@@ -1,65 +1,54 @@
 import { v4 as uuidv4 } from 'uuid';
-import {useHttp} from '../../hooks/http.hook';
-import { useCallback, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { createSelector } from '@reduxjs/toolkit';
+import { useSelector } from 'react-redux';
 
-import { fetchHeroes, selectAll } from '../../reducers/heroesSlice';
 import HeroesListItem from "../heroesListItem/HeroesListItem";
 import Spinner from '../spinner/Spinner';
+import { useDeleteHeroMutation, useGetHeroesQuery } from '../../api/apiSlice';
+import { useMemo } from 'react';
 
 const HeroesList = () => {
-    const filteredHeroesSelector = createSelector(
-        selectAll,
-        state => state.filters.activeFilter,
-      
-        ( heroes, filter ) => {
-            if(filter === 'all') {
-                return heroes
-            } else {
-                return heroes.filter((el) => el.element === filter);
-            }     
+
+    const {
+        data: heroes = [], // данные которые нам вернули
+        isFetching, // когда мы загружаем данные в последующие разы
+        isLoading,// когда обращаемя к серверу в первый раз
+        isSuccess,
+        isError, // есть ли ошибка
+        error // сама ошибка
+    } = useGetHeroesQuery(); 
+
+    const [onDelete, {error: deleteError}] = useDeleteHeroMutation();
+    
+    const activeFilter = useSelector( state => state.filters.activeFilter );
+
+    const filterHeroes = useMemo( () => {
+        const copiedHeroes = heroes.slice();
+
+        return activeFilter === 'all' ?
+            copiedHeroes :
+            copiedHeroes.filter( hero => hero.element === activeFilter );
+    },[heroes, activeFilter])
+
+    const renderHeroes = () => {
+        if ( isLoading || isFetching ) {
+            return <Spinner className="text-center mt-5"/>
         }
-    )
-
-    const {heroesLoadingStatus} = useSelector(state => state.heroes)
-
-    const dispatch = useDispatch();
-    const {request} = useHttp();
-
-    useEffect(() => {
-        dispatch(fetchHeroes());
-        // eslint-disable-next-line
-    }, []);
-
-    const onDelete =useCallback((id) => {
-        //dispatch(deleteHero(id));
-        request(`http://localhost:3001/heroes/${id}`, "DELETE")
-            .then(() => dispatch(fetchHeroes()))
-    }, [request])
-
-    const filteredHeroes = useSelector( filteredHeroesSelector );
-
-    if (heroesLoadingStatus === "loading") {
-        return <Spinner/>;
-    } else if (heroesLoadingStatus === "error") {
-        return <h5 className="text-center mt-5">Ошибка загрузки</h5>
+        if ( isError || deleteError ) {
+            return <h5 className="text-center mt-5">We hava an Error, look: { error.message }</h5>
+        }
+        if ( isSuccess ) {
+            const data = filterHeroes;
+            
+            return data.map( ( { id, ...props } ) => {
+                return <HeroesListItem key={uuidv4()} onDelete={() => onDelete(id)} {...props} />
+        })
+                
+        }
     }
 
-    const renderHeroesList = () => {
-        if (filteredHeroes.length === 0) {
-            return <h5 className="text-center mt-5">Героев пока нет</h5>
-        }
-        console.log(filteredHeroes);
-       return filteredHeroes.map(({id, ...props}) => {
-        return <HeroesListItem key={uuidv4()} onDelete={() => onDelete(id)} {...props}/>
-       })
-    }
-
-    const elements = renderHeroesList();
     return (
         <ul>
-            {elements}
+            {renderHeroes()}
         </ul>
     )
 }

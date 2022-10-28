@@ -1,14 +1,8 @@
 import { createSlice, createAsyncThunk, createEntityAdapter } from "@reduxjs/toolkit";
-import { useHttp } from '../hooks/http.hook';
+import { useHttp } from '../../hooks/http.hook';
 
 
 const heroesAdapter = createEntityAdapter();
-
-// const initialState = {
-//     heroes: [],
-//     heroesLoadingStatus: 'idle',
-//     heroCreatingStatus: 'idle',
-// }
 
 const initialState = heroesAdapter.getInitialState( {
     heroesLoadingStatus: 'idle',

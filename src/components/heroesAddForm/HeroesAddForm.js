@@ -1,35 +1,24 @@
 import { useState } from "react";
-import {useHttp} from '../../hooks/http.hook';
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { v4 as uuidv4 } from 'uuid';
-import { heroCreating, heroCreated, heroCreatingError } from '../../reducers/heroesSlice';
+import { useCreateHeroMutation } from "../../api/apiSlice";
 
 const HeroesAddForm = () => {
-    const dispatch = useDispatch();
+
+    const [createHero, {isLoading, isError}] = useCreateHeroMutation();
 
     const [name, setName] = useState(null);
     const [description, setDescription] = useState(null);
     const [element, setElement] = useState(null);
 
-    const {request} = useHttp();
 
     const { filters } = useSelector(state => state.filters);
-
-    const onCreateHero = ( id ) => {
-        request( 'http://localhost:3001/heroes/', "POST", JSON.stringify( {
-            id,
-            name,
-            description,
-            element
-        } ) )
-        .catch( heroCreatingError() );
-    }
 
     const Options = () => {
         return (
             filters.map( ( el ) => {
                 if ( el.name === 'all' ) {
-                    return
+                    return null;
                 }
               return (
                 <option key={el.id} value={el.name}>{el.name}</option>
@@ -38,22 +27,25 @@ const HeroesAddForm = () => {
         )
     };
 
-    const createHero = () => {
-        const id = uuidv4();
-        dispatch(heroCreating());
-        dispatch( heroCreated({
-            id,
+    const onSubmitHandler = (e) => {
+        e.preventDefault();
+
+        const newHero = {
+            id: uuidv4(),
             name,
             description,
             element
-        })
-        );
-        onCreateHero(id)
-    }
+        };
+        setName('');
+        setDescription('');
+        setElement('');
+
+        createHero(newHero).unwrap();
+    };
 
 
     return (
-        <form className="border p-4 shadow-lg rounded">
+        <form className="border p-4 shadow-lg rounded" onSubmit={onSubmitHandler}>
             <div className="mb-3">
                 <label htmlFor="name" className="form-label fs-4">Имя нового героя</label>
                 <input 
@@ -93,7 +85,7 @@ const HeroesAddForm = () => {
                 </select>
             </div>
 
-            <button type="submit" onClick={() => createHero()} className="btn btn-primary">Создать</button>
+            <button type="submit" className="btn btn-primary">Создать</button>
         </form>
     )
 }
