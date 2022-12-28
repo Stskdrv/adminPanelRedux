@@ -21,7 +21,7 @@
   },
   "scripts": {
     "start": "concurrently \"react-scripts --openssl-legacy-provider start\" \"npx json-server heroes.json --port 3001\"",
-    "build": "npm i && react-scripts --openssl-legacy-provider build",
+    "build": "npm i && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
